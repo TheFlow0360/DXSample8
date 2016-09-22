@@ -1,0 +1,78 @@
+﻿<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DXSample8"
+        xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
+        x:Class="DXSample8.MainWindow"
+        mc:Ignorable="d"
+        Title="MainWindow"
+        Height="350"
+        Width="525">
+    <Window.Resources>
+        <local:AddressStateToBrushConverter x:Key="StateToBrushConverter" />
+        <local:AddressStateToCaptionConverter x:Key="StateToCaptionConverter" />
+        <Style TargetType="{x:Type local:AddressStateControl}">
+            <Setter Property="SelectedItem"
+                    Value="{Binding State, RelativeSource={RelativeSource Self}, Mode=TwoWay}" />
+            <Setter Property="ApplyItemTemplateToSelectedItem"
+                    Value="True" />
+            <Setter Property="IsTextEditable"
+                    Value="False" />
+            <Setter Property="Padding"
+                    Value="5,0" />
+            <Setter Property="ItemTemplate">
+                <Setter.Value>
+                    <DataTemplate>
+                        <DockPanel>
+                            <Ellipse DockPanel.Dock="Left"
+                                     Width="12"
+                                     Height="12"
+                                     Fill="{Binding Converter={StaticResource StateToBrushConverter}, Mode=OneWay}" />
+                            <TextBlock Text="{Binding Converter={StaticResource StateToCaptionConverter}, Mode=OneWay}"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Stretch"
+                                       Margin="5,0,0,0" />
+                        </DockPanel>
+                    </DataTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <Grid>
+
+        <dxg:GridControl x:Name="Grid">
+            <dxg:GridControl.Columns>
+                <dxg:GridColumn Header="ID"
+                                FieldName="Id"/>
+                <dxg:GridColumn Header="Name"
+                                FieldName="Name"/>
+                <dxg:GridColumn Header="State"
+                                FieldName="State">
+                    <dxg:GridColumn.CellTemplate>
+                        <DataTemplate>
+                            <Ellipse Width="12"
+                                     Height="12"
+                                     Fill="{Binding Value, Converter={StaticResource StateToBrushConverter}, Mode=OneWay}"
+                                     ToolTip="{Binding Value, Converter={StaticResource StateToCaptionConverter}, Mode=OneWay}" />
+                        </DataTemplate>
+                    </dxg:GridColumn.CellTemplate>
+                    <dxg:GridColumn.AutoFilterRowDisplayTemplate>
+                        <ControlTemplate>
+                            <local:AddressStateControl x:Name="PART_Editor" />
+                        </ControlTemplate>
+                    </dxg:GridColumn.AutoFilterRowDisplayTemplate>
+                    <dxg:GridColumn.AutoFilterRowEditTemplate>
+                        <ControlTemplate>
+                            <local:AddressStateControl x:Name="PART_Editor" />
+                        </ControlTemplate>
+                    </dxg:GridColumn.AutoFilterRowEditTemplate>
+                </dxg:GridColumn>
+            </dxg:GridControl.Columns>
+            <dxg:GridControl.View>
+                <local:CustomTableView ShowAutoFilterRow="True" />
+            </dxg:GridControl.View>
+        </dxg:GridControl>
+
+    </Grid>
+</Window>
