@@ -10,13 +10,13 @@ namespace DXSample8
         {
             if (fieldName == "State")
             {
-                if (!(value is AddressState))
+                var statusWrapper = (AddressStateWrapper)value;
+                if (statusWrapper?.State == null)
                 {
                     return null;
                 }
-                var status = (AddressState)value;
 
-                return new BinaryOperator(new OperandProperty(fieldName), new OperandValue((Int16)status), BinaryOperatorType.Equal);
+                return new BinaryOperator(new OperandProperty(fieldName), new OperandValue((Int16)statusWrapper.State.Value), BinaryOperatorType.Equal);
             }
             return base.CreateAutoFilterCriteria(fieldName, condition, value);
         }
@@ -35,7 +35,7 @@ namespace DXSample8
                 {
                     return null;
                 }
-                return (AddressState)((Int16)criteriaOperator.Value);
+                return new AddressStateWrapper() { State = (AddressState)((Int16)criteriaOperator.Value) };
             }
             return base.GetAutoFilterValue(column, op);
         }

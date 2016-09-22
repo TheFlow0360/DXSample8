@@ -9,10 +9,27 @@ namespace DXSample8
     {
         public Object Convert(Object value, Type targetType, Object parameter, CultureInfo culture)
         {
+            if (value == null)
+            {
+                return null;
+            }
+
             AddressState status;
             if (value is AddressState)
             {
                 status = (AddressState)value;
+            }
+            else if (value is AddressStateWrapper)
+            {
+                var adressWrapper = (AddressStateWrapper)value;
+                if (adressWrapper?.State != null)
+                {
+                    status = adressWrapper.State.Value;
+                }
+                else
+                {
+                    return null;
+                }
             }
             else
             {
@@ -51,10 +68,27 @@ namespace DXSample8
     {
         public Object Convert(Object value, Type targetType, Object parameter, CultureInfo culture)
         {
+            if (value == null)
+            {
+                return NullString;
+            }
+
             AddressState status;
             if (value is AddressState)
             {
                 status = (AddressState)value;
+            }
+            else if (value is AddressStateWrapper)
+            {
+                var adressWrapper = (AddressStateWrapper)value;
+                if (adressWrapper?.State != null)
+                {
+                    status = adressWrapper.State.Value;
+                }
+                else
+                {
+                    return NullString;
+                }
             }
             else
             {
@@ -84,6 +118,8 @@ namespace DXSample8
                     return null;
             }
         }
+
+        private string NullString => "<All>";
 
         public Object ConvertBack(Object value, Type targetType, Object parameter, CultureInfo culture)
         {
